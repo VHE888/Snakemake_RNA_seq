@@ -15,6 +15,8 @@ The pipeline includes:
 - Microbial contamination detection
 - MultiQC summary report
 
+*Note: PhiX, rRNA, Microbial contamination detection are optional if you have processed data from facility.*
+
 ---
 
 ## Workflow
