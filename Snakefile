@@ -22,6 +22,7 @@ rule all:
 		expand("QC/microbial/{id}_REPORTFILE.tsv", id=IDS),
 		expand("QC/phix/{id}_phix.out", id=IDS),
 		expand("multiqc_report.{zip}", zip=["html"])
+		expand("QC/counts/readCount.{extens}", extens=["txt"]),
 
 rule fastqc:
 	input:
@@ -85,7 +86,9 @@ rule FeatureCounts:
 		counts="QC/counts/readCount.{extens}"
 	threads: 10
 	shell:
-		"~/miniconda2/bin/featureCounts -a genome/gencode.v32.annotation.gtf -o {output.counts} {input.bam} -T {threads}
+		"""
+		~/miniconda2/bin/featureCounts -a genome/gencode.v32.annotation.gtf -o {output.counts} {input.bam} -T {threads}
+		"""
 
 rule PhiXContamination:
 	input:
@@ -129,7 +132,7 @@ rule rRNAContamination:
 	threads: 10
 	shell: 
 		"""
-		~/miniconda2/bin/bwa mem -t {threads} {params} {input.trimmed1} {input.trimmed2} > {output.rnaSam}
+		~/miniconda2/bin/bwa mem -t {threads} {params.rna} {input.trimmed1} {input.trimmed2} > {output.rnaSam}
 		"""
 
 rule rRNAContaminationConversion:
